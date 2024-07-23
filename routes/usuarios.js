@@ -1,5 +1,7 @@
 const { Router } = require('express');
-const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } = require('../controllers/usuariosCtrl')
+const { check } = require('express-validator');
+const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } = require('../controllers/usuariosCtrl');
+const { validarCampos } = require('../middlewares/validarCampos');
 
 const router = Router();
 
@@ -8,7 +10,10 @@ const router = Router();
 router.get('/', usuariosGet)
 
 // Ruta POST
-router.post('/', usuariosPost)
+router.post('/',[check("nombre", "El nombre es obligatorio").notEmpty(), 
+    check("password", "La contraseña debe tener como minimo 6 caracteres").isLength({min:6}),
+    check("correo", "No es un correo valido").isEmail(),
+    validarCampos],usuariosPost);
 
 // Ruta PUT
 router.put('/:id', usuariosPut)
