@@ -39,6 +39,8 @@ class Server {
         // CORS: autorizacion que nos permite conectarnos con otro servidor o nuestra base de datos
         this.app.use(cors());
 
+        this.app.use(express.json());
+
         // MOstrar carpetas publicas
         this.app.use(express.static('public'));
     }

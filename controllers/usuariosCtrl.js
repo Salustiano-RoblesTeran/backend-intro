@@ -13,15 +13,17 @@ const usuariosGet = (req=request, res=response)=> {
 
 // Controlador POST
 const usuariosPost = (req=request, res=response)=> {
-    const {limit, key} = req.query;
+    const datos = req.body;
+    // const { nombre, correo, password, rol } = datos;
+
     res.json({
+        datos,
         mesaje: "Envio el mensaje"
     })
 }
 
 // Controlador PUT
 const usuariosPut = (req=request, res=response)=> {
-    const {limit, key} = req.query;
     res.json({
         mesaje: "Modifico datos"
     })
