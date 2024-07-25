@@ -1,5 +1,5 @@
 const Usuario = require('../models/usuario');
-const Rol = require('../models/rol')
+const Rol = require('../models/rol');
 
 const esMailValido = async (correo) => {
     const exiteCorreo = await Usuario.findOne({correo});
@@ -17,6 +17,14 @@ const esRolValido = async (rol) => {
     }
 }
 
+const esIdValido = async (id) => {
+    const exiteUsuario = await Usuario.findById(id);
+    if (exiteUsuario) {
+      throw new Error(`El correo ${id} ya existe en la base de datos!`);
+    }
+  };
+
+
 module.exports = {
-    esMailValido, esRolValido,
+    esMailValido, esRolValido, esIdValido,
 };
