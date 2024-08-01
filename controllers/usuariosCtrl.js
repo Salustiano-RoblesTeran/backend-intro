@@ -4,12 +4,31 @@ const bcrypt = require('bcryptjs');
 
 
 // Controlador GET
-const usuariosGet = (req=request, res=response)=> {
-    const {limit, key} = req.query;
+const usuariosGet = async (req=request, res=response)=> {
+
+    // Pedidos de lista completa
+    // const usuarios = await Usuario.find();
+
+    const {desde=0, limite} = req.query;
+
+    const estadoTrue = {estado: true};
+
+    // const usuarios = await Usuario.find().skip(desde).limit(limite);
+    // const total = await Usuario.countDocuments();
+
+
+    // Optimizar respuestas
+    const [total, usuarios] = await Promise.all([
+        Usuario.countDocuments(estadoTrue),
+        Usuario.find(estadoTrue).skip(desde).limit(limite)
+    ])
+
+
     res.json({
         mesaje: "Recibo el mensaje",
-        limit,
-        //! key
+        total,
+        usuarios,
+        
     })
 }
 
@@ -56,10 +75,26 @@ const usuariosPut = async (req=request, res=response)=> {
 }
 
 // Controlador DELETE
-const usuariosDelete = (req=request, res=response)=> {
-    const {limit, key} = req.query;
+const usuariosDelete = async (req=request, res=response)=> {
+    const {id} = req.params;
+
+    const usuarioAdmin = req.usuario;
+
+    const usuario = await Usuario.findById(id);
+
+    if (!usuario.estado){
+        return res.json({
+            msg: "El usuario ya esta inactivo"
+        })
+    }
+
+    // Cambiar el valor del estado
+    const usuarioInactivo = await Usuario.findByIdAndUpdate(id, {estado: false}, {new:true})
+
     res.json({
-        mesaje: "Elimino datos"
+        mesaje: "Elimino datos",
+        usuarioInactivo,
+        usuarioAdmin
     })
 }
 
