@@ -1,6 +1,6 @@
 const Usuario = require('../models/usuario');
 const Rol = require('../models/rol');
-
+const Categoria = require('../models/categorias')
 const esMailValido = async (correo) => {
     const exiteCorreo = await Usuario.findOne({correo});
 
@@ -24,7 +24,14 @@ const esIdValido = async (id) => {
     }
   };
 
+  const esCategoriaValida = async (nombre) => {
+    const existeCategoria = await Categoria.findOne({nombre});
+    if (existeCategoria) {
+        throw new Error("La categoria ya existe en la DB")
+    }
+  }
+
 
 module.exports = {
-    esMailValido, esRolValido, esIdValido,
+    esMailValido, esRolValido, esIdValido, esCategoriaValida
 };

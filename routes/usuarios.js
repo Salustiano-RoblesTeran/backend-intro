@@ -10,7 +10,15 @@ const router = Router();
 
 
 // Ruta GET
-router.get('/', usuariosGet)
+router.get('/',[
+  validarJWT,
+  esAdminRol,
+], usuariosGet)
+
+// Ruta GET - USUARIO
+router.get('/:id',[
+  validarJWT,
+], usuariosGet)
 
 // Ruta POST
 router.post('/',[check("nombre", "El nombre es obligatorio").notEmpty(), 
