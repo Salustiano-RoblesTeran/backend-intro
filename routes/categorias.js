@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {check} = require('express-validator')
-const { crearCategoria, obtenerCategoria, obtenerCategoriaId } = require('../controllers/categoriasCtrl');
+const { crearCategoria, obtenerCategoria, obtenerCategoriaId, borrarCategoria, actualizarCategoria } = require('../controllers/categoriasCtrl');
 const { esAdminRol } = require('../middlewares/validarRoles');
 const { validarJWT } = require('../middlewares/validarJwt');
 const { validarCampos } = require('../middlewares/validarCampos');
@@ -28,5 +28,29 @@ router.post("/", [
     validarCampos
     ], crearCategoria)
 
+    router.put(
+        "/:id",
+        [
+          validarJWT,
+          esAdminRol,
+          check("nombre", "El nombre es obligatorio").notEmpty(),
+          check("id", "El id no es valido").isMongoId(),
+          check("id").custom(esCategoriaValida),
+          validarCampos,
+        ],
+        actualizarCategoria
+      );
+      
+      router.delete(
+        "/:id",
+        [
+          validarJWT,
+          esAdminRol,
+          check("id", "El id no es valido").isMongoId(),
+          check("id").custom(esCategoriaValida),
+          validarCampos,
+        ],
+        borrarCategoria
+      );
 
 module.exports = router;
