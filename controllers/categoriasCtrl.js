@@ -71,6 +71,8 @@ const crearCategoria = async (req = request, res = response) => {
     }
 }
 
+// Controlador PUT
+
 const actualizarCategoria = async (req = request, res = response) => {
     const { id } = req.params;
   
@@ -90,6 +92,8 @@ const actualizarCategoria = async (req = request, res = response) => {
     });
   };
   
+  // Controlador DELETE 
+
   const borrarCategoria = async (req = request, res = response) => {
     const { id } = req.params;
   
