@@ -43,14 +43,15 @@ const crearCurso = async (req = request, res = response) => {
 
 // CONTROLADOR GET
 const obtenerCursos = async (req = request, res = response) => {
-  const { desde = 0, limite = 0} = req.body;
+  const { desde = 0, limite = 0} = req.query;
   const query = { estado: true }
 
   const [total, cursos] = await Promise.all([
       Curso.countDocuments(query),
-      Curso.find(query).skip(desde).limit(limite)
+      Curso.find(query).skip(Number(desde)).limit(Number(limite))
       //! METODO POPULATE: SIRVE PARA INFORMAR LAS PROPIEDADES DEL USUARIO QUE HIZO EL PEDIDO
       .populate("usuario", "correo")
+      .populate("categoria", "nombre")
 
 
   ]);
@@ -68,7 +69,7 @@ const obtenerCursoId = async (req = request, res = response) => {
   // Recibo del front
   const {id} = req.params;
 
-  const curso = await Curso.findById(id).populate("usuario", "nombre correo");
+  const curso = await Curso.findById(id).populate("usuario", "nombre correo").populate("categoria", "nombre");
 
   res.json({
     curso
@@ -80,6 +81,7 @@ const obtenerCursoId = async (req = request, res = response) => {
 
 const actualizarCurso = async (req = request, res = response) => {
   const { id } = req.params;
+  // const { precio, categoria, descripcion, imagen, estado } = req.body;
 
   const nombre = req.body.nombre.toUpperCase();
   const descripcion = req.body.descripcion;
@@ -99,6 +101,10 @@ const actualizarCurso = async (req = request, res = response) => {
     categoria,
     usuario,
   };
+
+  // if (req.body.nombre) {
+  //   data.nombre = req.body.nombre.toUpperCase();
+  // }
 
   const curso = await Curso.findByIdAndUpdate(id, data, { new: true });
 

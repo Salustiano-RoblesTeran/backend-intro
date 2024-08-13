@@ -4,7 +4,7 @@ const Categoria = require("../models/categorias");
 
 // Controlador GET
 const obtenerCategoria = async (req = request, res = response) => {
-    const { desde = 0, limite = 0} = req.body;
+    const { desde = 0, limite = 0} = req.query;
     const query = { estado: true }
 
     const [total, categorias] = await Promise.all([
