@@ -4,7 +4,7 @@ const Categoria = require("../models/categorias");
 
 // Controlador GET
 const obtenerCategoria = async (req = request, res = response) => {
-    const { desde = 0, limite = 0} = req.body;
+    const { desde = 0, limite = 0} = req.query;
     const query = { estado: true }
 
     const [total, categorias] = await Promise.all([
@@ -71,6 +71,8 @@ const crearCategoria = async (req = request, res = response) => {
     }
 }
 
+// Controlador PUT
+
 const actualizarCategoria = async (req = request, res = response) => {
     const { id } = req.params;
   
@@ -90,6 +92,8 @@ const actualizarCategoria = async (req = request, res = response) => {
     });
   };
   
+  // Controlador DELETE 
+
   const borrarCategoria = async (req = request, res = response) => {
     const { id } = req.params;
   
